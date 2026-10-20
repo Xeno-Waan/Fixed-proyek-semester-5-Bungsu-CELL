@@ -1,4 +1,4 @@
-# IMPLEMENTATION PLAN — BUNGSU CELL
+Update the CashEntryForm to use proper event handling (e.target.value) for the Select components, eliminating the TS2352 conversion errors.# IMPLEMENTATION PLAN — BUNGSU CELL
 
 **Versi:** v0.1.0  
 **Status:** APPROVED  

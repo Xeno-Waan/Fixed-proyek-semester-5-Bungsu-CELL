@@ -20,7 +20,7 @@ export const UsedPhoneForm: React.FC = () => {
   const [purchasePrice, setPurchasePrice] = useState('');
   const [repairSparepartCost, setRepairSparepartCost] = useState('');
   const [targetSellingPrice, setTargetSellingPrice] = useState('');
-  const [isSold, setIsSold] = useState(false);
+
   const [actualSellingPrice, setActualSellingPrice] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');

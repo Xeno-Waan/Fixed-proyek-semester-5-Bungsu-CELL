@@ -4,7 +4,7 @@ import { useFinanceStore } from "@/features/finance/hooks/useFinanceStore";
 import { formatRupiah } from "@/lib/currency";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
-import { Table } from "@/components/ui/Table";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { SimpleBarChart } from "@/components/ui/SimpleBarChart";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -92,7 +92,7 @@ export const FinanceDashboard: React.FC = () => {
       {/* Header and quick actions */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h1 className="text-2xl font-bold">Dashboard Keuangan</h1>
-        <Button variant="danger" onClick={resetAll}>
+        <Button variant="destructive" onClick={resetAll}>
           Reset Data
         </Button>
       </div>
@@ -180,7 +180,26 @@ export const FinanceDashboard: React.FC = () => {
           <CardTitle>Entri Kas ({displayedCash.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table columns={cashColumns} data={displayedCash} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {cashColumns.map(col => (
+                  <TableHead key={col.accessor}>{col.header}</TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {displayedCash.map((row) => (
+                <TableRow key={row.id}>
+                  {cashColumns.map(col => (
+                    <TableCell key={col.accessor}>
+                      {col.render ? col.render((row as any)[col.accessor]) : (row as any)[col.accessor]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
@@ -190,7 +209,26 @@ export const FinanceDashboard: React.FC = () => {
           <CardTitle>HP Bekas ({usedPhones.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table columns={phoneColumns} data={usedPhones} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {phoneColumns.map(col => (
+                  <TableHead key={col.accessor}>{col.header}</TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {usedPhones.map((row) => (
+                <TableRow key={row.id}>
+                  {phoneColumns.map(col => (
+                    <TableCell key={col.accessor}>
+                      {col.render ? col.render((row as any)[col.accessor]) : (row as any)[col.accessor]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

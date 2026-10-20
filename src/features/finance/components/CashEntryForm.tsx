@@ -108,7 +108,7 @@ export const CashEntryForm: React.FC = () => {
             label="Tipe Kas"
             options={cashTypeOptions}
             value={cashType}
-            onChange={(v) => setCashType(v as CashType)}
+            onChange={(e) => setCashType((e.target as HTMLSelectElement).value as CashType)}
             required
           />
           {/* Show specific PPOB transaction type when cash type is PPOB */}
@@ -117,7 +117,7 @@ export const CashEntryForm: React.FC = () => {
               label="Jenis Transaksi PPOB"
               options={ppoTransactionOptions}
               value={category}
-              onChange={(v) => setCategory(v as PPOBTransactionType)}
+              onChange={(e) => setCategory((e.target as HTMLSelectElement).value as PPOBTransactionType)}
               required
             />
           )}
@@ -134,7 +134,7 @@ export const CashEntryForm: React.FC = () => {
             label="Arah Kas"
             options={flowOptions}
             value={flow}
-            onChange={(v) => setFlow(v as 'in' | 'out')}
+            onChange={(e) => setFlow((e.target as HTMLSelectElement).value as 'in' | 'out')}
             required
           />
           <Input

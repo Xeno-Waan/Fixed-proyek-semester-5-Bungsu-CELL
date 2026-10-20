@@ -1,5 +1,5 @@
 // src/features/finance/hooks/useFinanceStore.ts
-import { useState, useCallback } from "react";
+
 import { CashEntry, UsedPhone } from "@/types";
 import { initialCashEntries, initialUsedPhones } from "../data/finance";
 import { useLocalStorage } from "@/hooks/useLocalStorage";

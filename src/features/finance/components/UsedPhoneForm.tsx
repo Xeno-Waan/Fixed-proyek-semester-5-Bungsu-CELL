@@ -72,7 +72,7 @@ export const UsedPhoneForm: React.FC = () => {
     // For demo purposes we sell the most recent unsold phone
     sellPhone(usedPhones[usedPhones.length - 1]?.id ?? '', Number(actualSellingPrice));
     setSuccess('HP bekas berhasil dijual & profit dihitung.');
-    setIsSold(false);
+
     setActualSellingPrice('');
   };
 
@@ -103,7 +103,7 @@ export const UsedPhoneForm: React.FC = () => {
           <form onSubmit={handleSell} className="mt-6 space-y-3">
             <h3 className="text-lg font-medium">Jual HP Bekas: {latestUnsold.brand} {latestUnsold.model}</h3>
             <Input label="Harga Jual Aktual (IDR)" type="number" value={actualSellingPrice} onChange={(e) => setActualSellingPrice(e.target.value)} required />
-            <Button type="submit" variant="success" className="w-full">Selesaikan Penjualan</Button>
+            <Button type="submit" variant="brand" className="w-full">Selesaikan Penjualan</Button>
           </form>
         )}
       </CardContent>

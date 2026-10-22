@@ -5,13 +5,15 @@ import { Wallet } from 'lucide-react';
 import { FinanceDashboard } from '@/features/finance/components/FinanceDashboard';
 import { CashEntryForm } from '@/features/finance/components/CashEntryForm';
 import { UsedPhoneForm } from '@/features/finance/components/UsedPhoneForm';
+import { FinanceStoreProvider } from '@/features/finance/hooks/useFinanceStore';
 
 /**
- * Finance module page – displays the finance dashboard and entry forms.
- * Aligns with Phase D scope and UI‑GUIDELINE styling.
+// Finance module page - displays the finance dashboard and entry forms.
+ * Aligns with Phase D scope and UI-GUIDELINE styling.
  */
 export const FinancePage: React.FC = () => {
   return (
+    <FinanceStoreProvider>
     <div className="space-y-8 p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -49,5 +51,6 @@ export const FinancePage: React.FC = () => {
         </Card>
       </div>
     </div>
+    </FinanceStoreProvider>
   );
 };

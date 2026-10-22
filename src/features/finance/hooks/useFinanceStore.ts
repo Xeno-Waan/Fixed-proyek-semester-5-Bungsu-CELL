@@ -1,5 +1,6 @@
 // src/features/finance/hooks/useFinanceStore.ts
 
+import React, { createContext, useCallback, useContext } from "react";
 import { CashEntry, UsedPhone } from "@/types";
 import { initialCashEntries, initialUsedPhones } from "../data/finance";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -8,7 +9,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
  * Simple store for finance data. Uses localStorage for persistence across page
  * refreshes (as required by the SOT). All operations are typed strictly.
  */
-export const useFinanceStore = () => {
+const useFinanceStoreState = () => {
   // Persist cash entries and used‑phone list separately.
   const [cashEntries, setCashEntries] = useLocalStorage<CashEntry[]>(
     "finance:cashEntries",
@@ -93,4 +94,18 @@ export const useFinanceStore = () => {
     sellPhone,
     resetAll,
   } as const;
+};
+
+type FinanceStore = ReturnType<typeof useFinanceStoreState>;
+const FinanceStoreContext = createContext<FinanceStore | null>(null);
+
+export const FinanceStoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const store = useFinanceStoreState();
+  return React.createElement(FinanceStoreContext.Provider, { value: store }, children);
+};
+
+export const useFinanceStore = () => {
+  const sharedStore = useContext(FinanceStoreContext);
+  const fallbackStore = useFinanceStoreState();
+  return sharedStore ?? fallbackStore;
 };

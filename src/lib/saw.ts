@@ -29,16 +29,43 @@ export function normalizeBenefit(val: number, maxVal: number): number {
  * Validates that weights sum to a positive number and normalizes them so their sum equals 1.
  */
 export function normalizeWeights(weights: Record<CriteriaCode, number>): Record<CriteriaCode, number> {
-  const codes = Object.keys(weights) as CriteriaCode[];
-  const total = codes.reduce((sum, code) => sum + (Math.max(0, weights[code] || 0)), 0);
+  const codes: CriteriaCode[] = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7'];
+  const total = codes.reduce((sum, code) => sum + weights[code], 0);
 
   const normalized: Partial<Record<CriteriaCode, number>> = {};
   codes.forEach((code) => {
-    const rawWeight = Math.max(0, weights[code] || 0);
-    normalized[code] = total > 0 ? Number((rawWeight / total).toFixed(4)) : 0;
+    normalized[code] = total > 0 ? weights[code] / total : 0;
   });
 
   return normalized as Record<CriteriaCode, number>;
+}
+
+const criteriaMapping: Record<CriteriaCode, keyof Smartphone['criteria']> = {
+  C1: 'price', C2: 'ram', C3: 'storage', C4: 'cameraQualityRating',
+  C5: 'cameraDesignRating', C6: 'battery', C7: 'conditionRating',
+};
+
+export interface ExcludedAlternative {
+  smartphoneId: string;
+  model: string;
+  reason: string;
+}
+
+export interface SAWCalculationResult {
+  results: SAWNormalizedItem[];
+  excluded: ExcludedAlternative[];
+  error?: string;
+}
+
+export function validateWeights(weights: Record<CriteriaCode, number>): string | undefined {
+  const values = Object.values(weights);
+  if (values.some((weight) => !Number.isFinite(weight) || weight < 0)) {
+    return 'Bobot harus berupa angka nol atau positif.';
+  }
+  if (values.reduce((sum, weight) => sum + weight, 0) <= 0) {
+    return 'Total bobot harus lebih dari nol.';
+  }
+  return undefined;
 }
 
 export interface SAWCalculationOptions {
@@ -54,8 +81,30 @@ export function calculateSAW(
   smartphones: Smartphone[],
   options: SAWCalculationOptions
 ): SAWNormalizedItem[] {
-  const activePhones = smartphones.filter((sp) => sp.isActive);
-  if (activePhones.length === 0) return [];
+  return calculateSAWWithDiagnostics(smartphones, options).results;
+}
+
+export function calculateSAWWithDiagnostics(
+  smartphones: Smartphone[],
+  options: SAWCalculationOptions
+): SAWCalculationResult {
+  const weightError = validateWeights(options.weights);
+  if (weightError) return { results: [], excluded: [], error: weightError };
+
+  const excluded: ExcludedAlternative[] = [];
+  const activePhones = smartphones.filter((sp) => {
+    if (!sp.isActive) return false;
+    const invalidCode = (Object.keys(criteriaMapping) as CriteriaCode[]).find((code) => {
+      const value = sp.criteria[criteriaMapping[code]];
+      return !Number.isFinite(value) || value < 0 || (code === 'C1' && value === 0);
+    });
+    if (invalidCode) {
+      excluded.push({ smartphoneId: sp.id, model: sp.model, reason: `Nilai ${invalidCode} tidak valid.` });
+      return false;
+    }
+    return true;
+  });
+  if (activePhones.length === 0) return { results: [], excluded };
 
   const normWeights = normalizeWeights(options.weights);
 
@@ -68,16 +117,6 @@ export function calculateSAW(
     C5: { min: Infinity, max: -Infinity },
     C6: { min: Infinity, max: -Infinity },
     C7: { min: Infinity, max: -Infinity },
-  };
-
-  const criteriaMapping: Record<CriteriaCode, keyof Smartphone['criteria']> = {
-    C1: 'price',
-    C2: 'ram',
-    C3: 'storage',
-    C4: 'cameraQualityRating',
-    C5: 'cameraDesignRating',
-    C6: 'battery',
-    C7: 'conditionRating',
   };
 
   activePhones.forEach((sp) => {
@@ -110,6 +149,8 @@ export function calculateSAW(
     return {
       smartphoneId: sp.id,
       model: sp.model,
+      condition: sp.condition,
+      price: sp.price,
       normalizedScores,
       weightedScores,
       finalScore: Number(finalScore.toFixed(4)),
@@ -130,5 +171,5 @@ export function calculateSAW(
     item.rank = index + 1;
   });
 
-  return results;
+  return { results, excluded };
 }

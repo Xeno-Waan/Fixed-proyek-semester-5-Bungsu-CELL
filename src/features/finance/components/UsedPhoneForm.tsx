@@ -12,7 +12,7 @@ import { Alert } from '@/components/ui/Alert';
  * validation alerts). No PIN or screen‑lock data is captured per SAW integrity.
  */
 export const UsedPhoneForm: React.FC = () => {
-  const { addUsedPhone, sellPhone } = useFinanceStore();
+  const { addUsedPhone, sellPhone, usedPhones } = useFinanceStore();
 
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
@@ -32,17 +32,14 @@ export const UsedPhoneForm: React.FC = () => {
     setPurchasePrice('');
     setRepairSparepartCost('');
     setTargetSellingPrice('');
-    setIsSold(false);
     setActualSellingPrice('');
-    setError('');
-    setSuccess('');
   };
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    if (!brand || !model || !purchasePrice || !targetSellingPrice) {
+    if (!brand || !model || !purchasePrice || !targetSellingPrice || Number(purchasePrice) <= 0 || Number(targetSellingPrice) <= 0) {
       setError('Isikan field wajib (brand, model, harga beli, target jual).');
       return;
     }
@@ -69,15 +66,17 @@ export const UsedPhoneForm: React.FC = () => {
       setError('Masukkan harga jual aktual untuk penjualan.');
       return;
     }
-    // For demo purposes we sell the most recent unsold phone
-    sellPhone(usedPhones[usedPhones.length - 1]?.id ?? '', Number(actualSellingPrice));
+    if (!latestUnsold || Number(actualSellingPrice) <= 0) {
+      setError('Masukkan harga jual aktual yang valid.');
+      return;
+    }
+    sellPhone(latestUnsold.id, Number(actualSellingPrice));
     setSuccess('HP bekas berhasil dijual & profit dihitung.');
 
     setActualSellingPrice('');
   };
 
-  // Access the current list to pick the latest unsold phone for selling
-  const { usedPhones } = useFinanceStore();
+  // Pick the first unsold phone for selling
   const latestUnsold = usedPhones.find((p) => !p.isSold);
 
   return (

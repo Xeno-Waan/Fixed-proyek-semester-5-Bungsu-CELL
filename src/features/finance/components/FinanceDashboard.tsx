@@ -1,5 +1,6 @@
 // src/features/finance/components/FinanceDashboard.tsx
 import React, { useMemo, useState } from "react";
+import type { CashEntry, UsedPhone } from "@/types";
 import { useFinanceStore } from "@/features/finance/hooks/useFinanceStore";
 import { formatRupiah } from "@/lib/currency";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
@@ -9,6 +10,13 @@ import { SimpleBarChart } from "@/components/ui/SimpleBarChart";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Calendar, DollarSign, TrendingUp } from "lucide-react";
+
+/** Generic column descriptor – avoids `any` casts when rendering heterogeneous table rows. */
+type TableColumn<T> = {
+  header: string;
+  accessor: keyof T;
+  render?: (value: T[keyof T]) => React.ReactNode;
+};
 
 /**
  * Finance dashboard – provides an overview of cash flow (counter vs PPOB),
@@ -37,11 +45,11 @@ export const FinanceDashboard: React.FC = () => {
 
   // Aggregate totals
   const totalIn = useMemo(
-    () => displayedCash.filter((c) => c.flow === "in").reduce((s, c) => s + c.amount, 0),
+    () => displayedCash.filter((c: CashEntry) => c.flow === "in").reduce((s: number, c: CashEntry) => s + c.amount, 0),
     [displayedCash],
   );
   const totalOut = useMemo(
-    () => displayedCash.filter((c) => c.flow === "out").reduce((s, c) => s + c.amount, 0),
+    () => displayedCash.filter((c: CashEntry) => c.flow === "out").reduce((s: number, c: CashEntry) => s + c.amount, 0),
     [displayedCash],
   );
   const netCash = totalIn - totalOut;
@@ -55,30 +63,30 @@ export const FinanceDashboard: React.FC = () => {
   );
 
   // Table columns for cash entries
-  const cashColumns = [
-    { header: "Tanggal", accessor: "date", render: (v: string) => new Date(v).toLocaleDateString() },
+  const cashColumns: TableColumn<CashEntry>[] = [
+    { header: "Tanggal", accessor: "date", render: (v) => new Date(v as string).toLocaleDateString() },
     { header: "Tipe Kas", accessor: "cashType" },
     { header: "Arah", accessor: "flow" },
-    { header: "Jumlah", accessor: "amount", render: (v: number) => formatRupiah(v) },
+    { header: "Jumlah", accessor: "amount", render: (v) => formatRupiah(v as number) },
     { header: "Kategori", accessor: "category" },
     { header: "Deskripsi", accessor: "description" },
   ];
 
-  // Table columns for used‑phone records
-  const phoneColumns = [
+  // Table columns for used-phone records
+  const phoneColumns: TableColumn<UsedPhone>[] = [
     { header: "Brand", accessor: "brand" },
     { header: "Model", accessor: "model" },
-    { header: "Beli", accessor: "purchasePrice", render: (v: number) => formatRupiah(v) },
-    { header: "Perbaikan", accessor: "repairSparepartCost", render: (v: number) => formatRupiah(v) },
-    { header: "Target Jual", accessor: "targetSellingPrice", render: (v: number) => formatRupiah(v) },
-    { header: "Terjual?", accessor: "isSold", render: (v: boolean) => (v ? "Ya" : "Tidak") },
-    { header: "Profit", accessor: "netProfit", render: (v?: number) => (v !== undefined ? formatRupiah(v) : "-") },
+    { header: "Beli", accessor: "purchasePrice", render: (v) => formatRupiah(v as number) },
+    { header: "Perbaikan", accessor: "repairSparepartCost", render: (v) => formatRupiah(v as number) },
+    { header: "Target Jual", accessor: "targetSellingPrice", render: (v) => formatRupiah(v as number) },
+    { header: "Terjual?", accessor: "isSold", render: (v) => (v ? "Ya" : "Tidak") },
+    { header: "Profit", accessor: "netProfit", render: (v) => (v !== undefined ? formatRupiah(v as number) : "-") },
   ];
 
   // Simple cash flow chart data (group by date)
   const cashChartData = useMemo(() => {
     const map: Record<string, number> = {};
-    displayedCash.forEach((c) => {
+    displayedCash.forEach((c: CashEntry) => {
       const d = new Date(c.date).toISOString().slice(0, 10);
       map[d] = (map[d] ?? 0) + (c.flow === "in" ? c.amount : -c.amount);
     });
@@ -189,11 +197,11 @@ export const FinanceDashboard: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {displayedCash.map((row) => (
+              {displayedCash.map((row: CashEntry) => (
                 <TableRow key={row.id}>
                   {cashColumns.map(col => (
-                    <TableCell key={col.accessor}>
-                      {col.render ? col.render((row as any)[col.accessor]) : (row as any)[col.accessor]}
+                    <TableCell key={String(col.accessor)}>
+                      {col.render ? col.render(row[col.accessor]) : String(row[col.accessor] ?? '')}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -218,11 +226,11 @@ export const FinanceDashboard: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {usedPhones.map((row) => (
+              {usedPhones.map((row: UsedPhone) => (
                 <TableRow key={row.id}>
                   {phoneColumns.map(col => (
-                    <TableCell key={col.accessor}>
-                      {col.render ? col.render((row as any)[col.accessor]) : (row as any)[col.accessor]}
+                    <TableCell key={String(col.accessor)}>
+                      {col.render ? col.render(row[col.accessor]) : String(row[col.accessor] ?? '')}
                     </TableCell>
                   ))}
                 </TableRow>

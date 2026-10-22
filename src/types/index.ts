@@ -204,6 +204,8 @@ export interface CustomerPreference {
 export interface SAWNormalizedItem {
   smartphoneId: string;
   model: string;
+  condition: SmartphoneCondition;
+  price: number;
   normalizedScores: Record<CriteriaCode, number>; // r_ij
   weightedScores: Record<CriteriaCode, number>; // w_j * r_ij
   finalScore: number; // V_i

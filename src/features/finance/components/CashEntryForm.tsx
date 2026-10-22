@@ -34,8 +34,6 @@ export const CashEntryForm: React.FC = () => {
     setCategory('');
     setDescription('');
     setReferenceId('');
-    setError('');
-    setSuccess('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -80,6 +78,7 @@ export const CashEntryForm: React.FC = () => {
   ];
 
   const ppoTransactionOptions = [
+    { value: '', label: 'Pilih jenis transaksi' },
     { value: 'transfer', label: 'Transfer' },
     { value: 'tarik_tunai', label: 'Tarik Tunai' },
     { value: 'token_listrik', label: 'Token Listrik' },
@@ -108,7 +107,7 @@ export const CashEntryForm: React.FC = () => {
             label="Tipe Kas"
             options={cashTypeOptions}
             value={cashType}
-            onChange={(e) => setCashType((e.target as HTMLSelectElement).value as CashType)}
+            onChange={(e) => setCashType(e.target.value as CashType)}
             required
           />
           {/* Show specific PPOB transaction type when cash type is PPOB */}
@@ -117,7 +116,7 @@ export const CashEntryForm: React.FC = () => {
               label="Jenis Transaksi PPOB"
               options={ppoTransactionOptions}
               value={category}
-              onChange={(e) => setCategory((e.target as HTMLSelectElement).value as PPOBTransactionType)}
+              onChange={(e) => setCategory(e.target.value as PPOBTransactionType)}
               required
             />
           )}
@@ -134,7 +133,7 @@ export const CashEntryForm: React.FC = () => {
             label="Arah Kas"
             options={flowOptions}
             value={flow}
-            onChange={(e) => setFlow((e.target as HTMLSelectElement).value as 'in' | 'out')}
+            onChange={(e) => setFlow(e.target.value as 'in' | 'out')}
             required
           />
           <Input

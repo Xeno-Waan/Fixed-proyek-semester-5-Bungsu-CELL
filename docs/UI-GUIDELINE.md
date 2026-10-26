@@ -19,10 +19,10 @@
 
 | Token | Nilai | Penggunaan |
 |---|---|---|
-| brand-green | #DDF4C9 | Highlight identitas |
-| brand-yellow | #FFF0A8 | Aksen dan perhatian |
-| deep-green | #183D2A | Teks utama dan sidebar |
-| page-bg | #F4F7F2 | Latar halaman |
+| brand-green | #E1F5D1 | Warna dominan navigasi dan panel identitas |
+| brand-yellow | #FFF2B8 | Aksen dan aksi utama |
+| deep-green | #183D2A | Teks utama, fokus, dan kontras |
+| page-bg | #FBFCF8 | Latar halaman terang |
 | surface | #FFFFFF | Kartu dan panel |
 | text-muted | #647566 | Teks sekunder |
 | success | #287A45 | Keberhasilan |

@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --brand-green: #DDF4C9;
-    --brand-yellow: #FFF0A8;
+    --brand-green: #E1F5D1;
+    --brand-yellow: #FFF2B8;
     --deep-green: #183D2A;
-    --page-bg: #F4F7F2;
+    --page-bg: #FBFCF8;
     --surface: #FFFFFF;
     --text-muted: #647566;
     --success: #287A45;

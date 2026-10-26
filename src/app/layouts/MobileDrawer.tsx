@@ -102,27 +102,27 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
       <div
         ref={drawerRef}
         tabIndex={-1}
-        className="fixed inset-y-0 left-0 flex w-72 max-w-[calc(100vw-2rem)] flex-col justify-between overflow-y-auto bg-deep-green p-4 text-surface shadow-dropdown motion-safe:animate-drawer-in motion-reduce:animate-none"
+        className="fixed inset-y-0 left-0 flex w-72 max-w-[calc(100vw-2rem)] flex-col justify-between overflow-y-auto bg-brand-green p-4 text-deep-green shadow-dropdown motion-safe:animate-drawer-in motion-reduce:animate-none"
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between pb-4 border-b border-[#245239]">
+          <div className="flex items-center justify-between pb-4 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-control bg-brand-green flex items-center justify-center text-deep-green font-bold">
                 <Smartphone className="w-5 h-5 stroke-[2.5]" />
               </div>
               <div className="flex flex-col">
-              <span id="mobile-navigation-title" className="font-bold text-base text-brand-green leading-tight">
+              <span id="mobile-navigation-title" className="font-bold text-base text-deep-green leading-tight">
                 BUNGSU CELL
                 </span>
-                <span className="text-[11px] text-[#A6C5B2]">POS & SPK Mobile</span>
+                <span className="text-[11px] text-text-muted">POS & SPK Mobile</span>
               </div>
             </div>
             <button
               type="button"
               ref={closeButtonRef}
               onClick={onClose}
-              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-control text-[#A6C5B2] hover:bg-[#204933] hover:text-surface"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-control text-text-muted hover:bg-brand-yellow hover:text-deep-green"
               aria-label="Tutup menu navigasi"
             >
               <X className="w-5 h-5" />
@@ -142,8 +142,8 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                     cn(
                       'flex items-center justify-between px-3 py-2.5 rounded-control text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-brand-green text-deep-green font-semibold shadow-sm'
-                        : 'text-[#D0E0D6] hover:bg-[#204933] hover:text-surface'
+                        ? 'bg-surface text-deep-green font-semibold shadow-sm'
+                        : 'text-deep-green/80 hover:bg-surface/70 hover:text-deep-green'
                     )
                   }
                 >
@@ -152,7 +152,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                     <span>{route.label}</span>
                   </div>
                   {route.badge && (
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/40">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-yellow text-deep-green border border-[#EAD98A]">
                       {route.badge}
                     </span>
                   )}
@@ -163,16 +163,16 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
         </div>
 
         {/* Footer profile */}
-        <div className="pt-4 border-t border-[#245239]">
+        <div className="pt-4 border-t border-border">
           <div className="flex items-center gap-3 px-2">
             <div className="w-8 h-8 rounded-full bg-brand-yellow text-deep-green font-bold text-xs flex items-center justify-center">
               {currentUser.name.charAt(0)}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-surface truncate">
+              <p className="text-xs font-semibold text-deep-green truncate">
                 {currentUser.name}
               </p>
-              <p className="text-[11px] text-brand-yellow font-medium uppercase tracking-wider">
+              <p className="text-[11px] text-text-muted font-medium uppercase tracking-wider">
                 Simulasi: {currentUser.role}
               </p>
             </div>

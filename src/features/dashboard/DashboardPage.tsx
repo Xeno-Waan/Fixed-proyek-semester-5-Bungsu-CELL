@@ -92,13 +92,13 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="p-6 rounded-card bg-deep-green text-surface flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-card bg-brand-green text-deep-green border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <p className="text-[#A6C5B2] text-xs font-semibold uppercase tracking-wider">
+          <p className="text-text-muted text-xs font-semibold uppercase tracking-wider">
             Bungsu Cell · Dashboard Operasional
           </p>
           <h2 className="text-2xl font-bold mt-1">Selamat datang kembali</h2>
-          <p className="text-sm text-[#D0E0D6] mt-0.5">
+          <p className="text-sm text-text-muted mt-0.5">
             Ringkasan aktivitas konter hari ini — data diperbarui secara langsung.
           </p>
         </div>

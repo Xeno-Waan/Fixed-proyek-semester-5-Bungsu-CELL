@@ -31,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-deep-green text-surface hover:bg-opacity-90 focus-visible:ring-deep-green shadow-sm',
+        'bg-brand-yellow text-deep-green hover:bg-[#FFE98A] focus-visible:ring-deep-green shadow-sm',
       secondary:
         'bg-[#E8F0E5] text-deep-green hover:bg-[#DCE7D9] focus-visible:ring-deep-green',
       outline:
